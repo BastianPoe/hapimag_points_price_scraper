@@ -152,7 +152,7 @@ while True:
 	chrome_options.add_argument('--disable-gpu')
 
 	# Start chromium
-	driver = webdriver.Chrome(chrome_options=chrome_options)
+	driver = webdriver.Chrome(options=chrome_options)
 
 	# Load Hapimag Login website
 	driver.get("https://welcome.hapimag.com/auth/realms/hapimag-customer-experience/protocol/openid-connect/auth?client_id=hapimag-spa&redirect_uri=https%3A%2F%2Fwww.hapimag.com%2Fde-de%2F&state=7be83d3e-919f-4692-8878-9f2e4e9ff670&response_mode=fragment&response_type=code&scope=openid&nonce=2173a0b3-3449-4ebc-ad1c-525af8d84e51&code_challenge=y0DLOgpZcIZymAsxBEqc25WuI5Q5MQ73mOmWJpUqmRc&code_challenge_method=S256")
