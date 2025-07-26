@@ -3,8 +3,10 @@ FROM python:3.9-slim-buster
 
 # Set environment variables for headless Chrome
 ENV DEBIAN_FRONTEND=noninteractive
-ENV CHROME_DRIVER_VERSION=126.0.6478.126 # Specify a compatible ChromeDriver version
-ENV CHROME_VERSION=126.0.6478.126 # Specify a compatible Chrome version
+# Specify a compatible ChromeDriver version
+ENV CHROME_DRIVER_VERSION=126.0.6478.126
+# Specify a compatible Chrome version
+ENV CHROME_VERSION=126.0.6478.126
 
 # Install Google Chrome and ChromeDriver
 # We need to install gnupg for the Google Chrome repository key
