@@ -9,11 +9,13 @@ ENV CHROME_DRIVER_VERSION=126.0.6478.126
 ENV CHROME_VERSION=126.0.6478.126
 
 # Install Google Chrome and ChromeDriver
-# We need to install gnupg for the Google Chrome repository key
+# This section has been updated to use a more robust method for adding the GPG key
+# and installing Chrome, addressing potential issues with apt-key add.
 RUN apt-get update && apt-get install -y \
     wget \
     gnupg \
     unzip \
+    curl \
     libglib2.0-0 \
     libnss3 \
     libfontconfig1 \
@@ -33,10 +35,12 @@ RUN apt-get update && apt-get install -y \
     lsb-release \
     xdg-utils \
     --no-install-recommends && \
-    wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | apt-key add - && \
-    echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
+    # Add Google Chrome GPG key and repository using a more modern approach
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
     apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends && \
+    # Download and install ChromeDriver
     wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
