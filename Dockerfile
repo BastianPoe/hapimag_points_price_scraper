@@ -4,9 +4,9 @@ FROM python:3.9.23-bookworm
 # Set environment variables for headless Chrome
 ENV DEBIAN_FRONTEND=noninteractive
 # Specify a compatible ChromeDriver version
-ENV CHROME_DRIVER_VERSION=126.0.6478.126
+ENV CHROME_DRIVER_VERSION=138.0.7204.168
 # Specify a compatible Chrome version
-ENV CHROME_VERSION=126.0.6478.126
+ENV CHROME_VERSION=138.0.7204.168
 
 # Install Google Chrome and ChromeDriver
 # This section has been updated to use a more robust method for adding the GPG key
@@ -38,7 +38,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-RUN apt-get update && apt-get install -y google-chrome-stable --no-install-recommends
+RUN apt-get update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends
 
 # Add Google Chrome GPG key and repository using a more modern approach
 #RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
@@ -47,26 +47,26 @@ RUN apt-get update && apt-get install -y google-chrome-stable --no-install-recom
 #    apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends
 
 # Dynamically find the installed Chrome version and download compatible ChromeDriver
-RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+') && \
-    CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
-                           grep -oP "\"$CHROME_VERSION\"[^}]*\"chromedriver\":\s*\[\s*{\s*\"platform\":\s*\"linux64\",\s*\"url\":\s*\"([^\"]+)\"" | \
-                           head -1 | sed -E 's/.*"url":\s*"([^"]+)".*/\1/') && \
-    wget -N "$CHROMEDRIVER_VERSION" -O /tmp/chromedriver-linux64.zip && \
+#RUN CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+') && \
+#    CHROMEDRIVER_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/last-known-good-versions-with-downloads.json" | \
+#                           grep -oP "\"$CHROME_VERSION\"[^}]*\"chromedriver\":\s*\[\s*{\s*\"platform\":\s*\"linux64\",\s*\"url\":\s*\"([^\"]+)\"" | \
+#                           head -1 | sed -E 's/.*"url":\s*"([^"]+)".*/\1/') && \
+#    wget -N "$CHROMEDRIVER_VERSION" -O /tmp/chromedriver-linux64.zip && \
+#    unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
+#    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
+#    rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
+#    chmod +x /usr/local/bin/chromedriver && \
+#    apt-get clean && \
+#    rm -rf /var/lib/apt/lists/*
+    
+# Download and install ChromeDriver
+RUN wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
     chmod +x /usr/local/bin/chromedriver && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
-    
-# Download and install ChromeDriver
-#RUN wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
-#    unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
-##    mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
-#    rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
-#    chmod +x /usr/local/bin/chromedriver && \
-#    apt-get clean && \
-#    rm -rf /var/lib/apt/lists/*
 
 # Set the working directory in the container
 WORKDIR /app
