@@ -1,5 +1,5 @@
 # Use a base image with Python and necessary build tools
-FROM python:3.9-slim-buster
+FROM python:3.9.23-bookworm
 
 # Set environment variables for headless Chrome
 ENV DEBIAN_FRONTEND=noninteractive
