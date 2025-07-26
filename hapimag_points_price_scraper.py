@@ -144,8 +144,15 @@ while True:
 	# Next polling will start after 'reload_interval' seconds
 	next_execution_time = time.time() + config.get('reload_interval')
 
+	# Configure Chrome to run headless
+	chrome_options = webdriver.ChromeOptions()
+	chrome_options.add_argument('--no-sandbox')
+	chrome_options.add_argument('--window-size=1920,1080')
+	chrome_options.add_argument('--headless')
+	chrome_options.add_argument('--disable-gpu')
+
 	# Start chromium
-	driver = webdriver.Chrome() 
+	driver = webdriver.Chrome(chrome_options=chrome_options)
 
 	# Load Hapimag Login website
 	driver.get("https://welcome.hapimag.com/auth/realms/hapimag-customer-experience/protocol/openid-connect/auth?client_id=hapimag-spa&redirect_uri=https%3A%2F%2Fwww.hapimag.com%2Fde-de%2F&state=7be83d3e-919f-4692-8878-9f2e4e9ff670&response_mode=fragment&response_type=code&scope=openid&nonce=2173a0b3-3449-4ebc-ad1c-525af8d84e51&code_challenge=y0DLOgpZcIZymAsxBEqc25WuI5Q5MQ73mOmWJpUqmRc&code_challenge_method=S256")

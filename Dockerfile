@@ -61,6 +61,8 @@ WORKDIR /app
 # Copy the Python script and the configuration file into the container
 COPY hapimag_points_price_scraper.py .
 
+ENV DISPLAY=:99
+
 # Install Python dependencies
 # It's recommended to use a requirements.txt file for your dependencies
 COPY requirements.txt .
