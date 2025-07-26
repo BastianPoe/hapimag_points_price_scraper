@@ -14,5 +14,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Log in to Docker Hub
+      # This action logs in to Docker Hub using provided credentials.
+      # It's crucial to store your DOCKER_USERNAME and DOCKER_TOKEN as GitHub Secrets.
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_TOKEN }}
+#    - name: Build the Docker image
+#      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Build and push Docker image
+      # This action builds the Docker image and, if push: true, pushes it to the registry.
+      # Replace 'yourusername/hapimag-scraper' with your actual Docker Hub username and repository name.
+      # The 'latest' tag is commonly used for the most recent build from the main branch.
+      uses: docker/build-push-action@v5
+      with:
+        context: . # Specifies the build context (current directory)
+        push: true # Set to true to push the image to Docker Hub
+        tags: bastianpoe/hapimag_points_price_scraper:latest # Replace with your Docker Hub repo and desired tag
+        # You can also use a dynamic tag based on the commit SHA or date:
+        # tags: yourusername/hapimag-scraper:${{ github.sha }}
+        # tags: yourusername/hapimag-scraper:${{ github.run_number }}
+        # tags: yourusername/hapimag-scraper:$(date +%Y%m%d%H%M%S) # Not ideal
