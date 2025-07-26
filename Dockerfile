@@ -34,14 +34,16 @@ RUN apt-get update && apt-get install -y \
     fonts-liberation \
     lsb-release \
     xdg-utils \
-    --no-install-recommends && \
-    # Add Google Chrome GPG key and repository using a more modern approach
-    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
+    --no-install-recommends 
+
+# Add Google Chrome GPG key and repository using a more modern approach
+RUN curl -fsSL https://dl.google.com/linux/linux_signing_key.pub | gpg --dearmor -o /usr/share/keyrings/google-chrome.gpg && \
     echo "deb [arch=amd64 signed-by=/usr/share/keyrings/google-chrome.gpg] http://dl.google.com/linux/chrome/deb/ stable main" > /etc/apt/sources.list.d/google-chrome.list && \
     apt-get update && \
-    apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends && \
-    # Download and install ChromeDriver
-    wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
+    apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends
+
+# Download and install ChromeDriver
+RUN wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_DRIVER_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
