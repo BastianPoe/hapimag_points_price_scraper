@@ -160,7 +160,7 @@ while True:
 	# Wait for the login button
 	try:
 	    # Warte bis der Anmelden-Button sichtbar und klickbar ist
-	    login_button = WebDriverWait(driver, 10).until(
+	    login_button = WebDriverWait(driver, 120).until(
 		EC.element_to_be_clickable((By.ID, "kc-login"))
 	    )
 	except Exception as e:
@@ -174,7 +174,7 @@ while True:
 	# Enter credentials and click login
 	try:
 	    # Wait for username field to appear
-	    username_field = WebDriverWait(driver, 10).until(
+	    username_field = WebDriverWait(driver, 120).until(
 		EC.visibility_of_element_located((By.ID, "username"))
 	    )
 	    password_field = driver.find_element(By.ID, "password")
@@ -201,7 +201,7 @@ while True:
 
 	# Wait for price to appear
 	try:
-	    points_field = WebDriverWait(driver, 60).until(
+	    points_field = WebDriverWait(driver, 120).until(
 		EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiTypography-root.MuiTypography-caption"))
 	    )
 	except Exception as e:
