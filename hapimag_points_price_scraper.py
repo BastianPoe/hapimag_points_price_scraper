@@ -140,10 +140,10 @@ if config: # Check if the dictionary is not empty
 else:
 	print("\nFailed to read configuration from the file.")
 
-while True:
-	# Next polling will start after 'reload_interval' seconds
-	next_execution_time = time.time() + config.get('reload_interval')
+# Next polling will start after 'reload_interval' seconds
+next_execution_time = time.time() + config.get('reload_interval')
 
+while True:
 	# Configure Chrome to run headless
 	chrome_options = webdriver.ChromeOptions()
 	chrome_options.add_argument('--no-sandbox')
@@ -253,3 +253,5 @@ while True:
 		print(f"Action took longer than interval or caught up. Proceeding immediately.")
 
 	print("\n")
+
+	next_execution_time = next_execution_time + config.get('reload_interval')
