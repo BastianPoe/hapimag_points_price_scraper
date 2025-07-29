@@ -244,14 +244,16 @@ while True:
 	# Output row data
 	print(row_data)
 
-	# Sleep to keep the interval
+	# Calculate sleep interval
 	sleep_duration = next_execution_time - time.time()
+
+	# Calculate when to execute next time
+	while next_execution_time < time.time():
+		next_execution_time = next_execution_time + config.get('reload_interval')
+
+	# Sleep
 	if sleep_duration > 0:
 		print(f"Sleeping for {sleep_duration:.2f} seconds...")
 		time.sleep(sleep_duration)
-	else:
-		print(f"Action took longer than interval or caught up. Proceeding immediately.")
 
 	print("\n")
-
-	next_execution_time = next_execution_time + config.get('reload_interval')
