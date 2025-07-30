@@ -144,6 +144,8 @@ else:
 next_execution_time = time.time() + config.get('reload_interval')
 
 while True:
+	print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Starting another cycle")
+	
 	# Configure Chrome to run headless
 	chrome_options = webdriver.ChromeOptions()
 	chrome_options.add_argument('--no-sandbox')
@@ -249,11 +251,12 @@ while True:
 
 	# Calculate when to execute next time
 	while next_execution_time < time.time():
+		print(f"{next_execution_time} + {config.get('reload_interval')}")
 		next_execution_time = next_execution_time + config.get('reload_interval')
 
 	# Sleep
 	if sleep_duration > 0:
-		print(f"Sleeping for {sleep_duration:.2f} seconds...")
+		print(f"[{time.strftime('%Y-%m-%d %H:%M:%S')}] Sleeping for {sleep_duration:.2f} seconds...")
 		time.sleep(sleep_duration)
 
 	print("\n")
