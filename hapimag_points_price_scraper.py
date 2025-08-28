@@ -7,6 +7,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import time 
 import os
 from datetime import datetime, timedelta
+import simplepush
 
 def read_config(config_file_path):
     """
@@ -27,7 +28,9 @@ def read_config(config_file_path):
         'worksheet_name': None,
         'reload_interval': None,
         'number_of_points': None,
-        'points_validity': None
+        'points_validity': None,
+		'price_threshold': None,
+		'simplepush_key': None
     }
 
     # Check if the configuration file exists
@@ -50,7 +53,7 @@ def read_config(config_file_path):
                     # Assign values to the dictionary based on the key
                     if key in config_params:
                         # Attempt to convert integer parameters
-                        if key in ['reload_interval', 'number_of_points', 'points_validity']:
+                        if key in ['reload_interval', 'number_of_points', 'points_validity', 'price_threshold']:
                             try:
                                 config_params[key] = int(value)
                             except ValueError:
@@ -126,6 +129,11 @@ if not os.path.exists(config_filename):
 	    f.write("number_of_points=60\n")
 	    f.write("# Number of days the points need to be valid at least\n")
 	    f.write("points_validity=365\n")
+		f.write("# Price threshold for notifications in cents\n")
+		f.write("price_threshold = 650\n")
+		f.write("# Key for Simplepush notifications\n")
+		f.write("simplepush_key=MySecretKey\n")
+		
 
 # Read the configuration
 config = read_config(config_filename)
@@ -249,6 +257,16 @@ while True:
 	# Calculate sleep interval
 	sleep_duration = next_execution_time - time.time()
 
+	if float(preis)*100 <= config.get('price_threshold'):
+		title = 'Hapimag Punkte sind günstig'
+		message = preis
+	
+		try:
+	    	simplepush.send(key=config.get('simplepush_key'), title=title, message=message)
+	    	print("Notification sent successfully.")
+		except Exception as e:
+	    	print(f"Failed to send notification: {e}")
+	
 	# Calculate when to execute next time
 	while next_execution_time < time.time():
 		print(f"{next_execution_time} + {config.get('reload_interval')}")
