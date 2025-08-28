@@ -129,10 +129,10 @@ if not os.path.exists(config_filename):
 	    f.write("number_of_points=60\n")
 	    f.write("# Number of days the points need to be valid at least\n")
 	    f.write("points_validity=365\n")
-		f.write("# Price threshold for notifications in cents\n")
-		f.write("price_threshold = 650\n")
-		f.write("# Key for Simplepush notifications\n")
-		f.write("simplepush_key=MySecretKey\n")
+	    f.write("# Price threshold for notifications in cents\n")
+	    f.write("price_threshold = 650\n")
+	    f.write("# Key for Simplepush notifications\n")
+	    f.write("simplepush_key=MySecretKey\n")
 		
 
 # Read the configuration
