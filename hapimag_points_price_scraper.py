@@ -29,8 +29,8 @@ def read_config(config_file_path):
         'reload_interval': None,
         'number_of_points': None,
         'points_validity': None,
-		'price_threshold': None,
-		'simplepush_key': None
+	'price_threshold': None,
+	'simplepush_key': None
     }
 
     # Check if the configuration file exists
@@ -262,10 +262,10 @@ while True:
 		message = preis
 	
 		try:
-	    	simplepush.send(key=config.get('simplepush_key'), title=title, message=message)
-	    	print("Notification sent successfully.")
+			simplepush.send(key=config.get('simplepush_key'), title=title, message=message)
+			print("Notification sent successfully.")
 		except Exception as e:
-	    	print(f"Failed to send notification: {e}")
+			print(f"Failed to send notification: {e}")
 	
 	# Calculate when to execute next time
 	while next_execution_time < time.time():
