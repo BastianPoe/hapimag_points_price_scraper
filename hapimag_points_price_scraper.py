@@ -165,9 +165,17 @@ while True:
 	driver = webdriver.Chrome(options=chrome_options)
 
 	# Load Hapimag Login website
-	driver.get("https://welcome.hapimag.com/auth/realms/hapimag-customer-experience/protocol/openid-connect/auth?client_id=hapimag-spa&redirect_uri=https%3A%2F%2Fwww.hapimag.com%2Fde-de%2F&state=7be83d3e-919f-4692-8878-9f2e4e9ff670&response_mode=fragment&response_type=code&scope=openid&nonce=2173a0b3-3449-4ebc-ad1c-525af8d84e51&code_challenge=y0DLOgpZcIZymAsxBEqc25WuI5Q5MQ73mOmWJpUqmRc&code_challenge_method=S256")
-	
-	# Wait for the login button
+	try:
+            driver.get("https://welcome.hapimag.com/auth/realms/hapimag-customer-experience/protocol/openid-connect/auth?client_id=hapimag-spa&redirect_uri=https%3A%2F%2Fwww.hapimag.com%2Fde-de%2F&state=7be83d3e-919f-4692-8878-9f2e4e9ff670&response_mode=fragment&response_type=code&scope=openid&nonce=2173a0b3-3449-4ebc-ad1c-525af8d84e51&code_challenge=y0DLOgpZcIZymAsxBEqc25WuI5Q5MQ73mOmWJpUqmRc&code_challenge_method=S256")
+	except Exception as e:
+	    print(f"Unable to find login button: {e}")
+	    driver.quit()
+	    
+	    # Wait to avoid overloading the server
+	    time.sleep(600)
+	    continue
+
+        # Wait for the login button
 	try:
 	    # Warte bis der Anmelden-Button sichtbar und klickbar ist
 	    login_button = WebDriverWait(driver, 120).until(
@@ -215,7 +223,15 @@ while True:
 	target_date = find_future_june_30th(config.get('points_validity'))
 
 	# Access points buy site
-	driver.get(f"https://www.hapimag.com/de-de/points-shares/points/buy/offer/?points={config.get('number_of_points')}&minimum_expiration_date={target_date}")
+	try:
+            driver.get(f"https://www.hapimag.com/de-de/points-shares/points/buy/offer/?points={config.get('number_of_points')}&minimum_expiration_date={target_date}")
+	except Exception as e:
+	    print(f"Unable to find login button: {e}")
+	    driver.quit()
+	    
+	    # Wait to avoid overloading the server
+	    time.sleep(600)
+	    continue
 
 	# Wait for price to appear
 	try:
