@@ -175,6 +175,10 @@ while True:
 	    )
 	except Exception as e:
 	    print(f"Unable to find login button: {e}")
+	    
+	    filename = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_loginbutton.png")
+	    driver.save_screenshot(filename)
+
 	    driver.quit()
 	    # Wait to avoid overloading the server
 	    time.sleep(600)
@@ -198,6 +202,10 @@ while True:
 	    submit_login_button.click()
 	except Exception as e:
 	    print(f"Unable to login: {e}")
+	    
+	    filename = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_loginbutton.png")
+	    driver.save_screenshot(filename)
+            
 	    driver.quit()
 	    # Wait to avoid overloading the server
 	    time.sleep(600)
@@ -216,6 +224,10 @@ while True:
 	    )
 	except Exception as e:
 	    print(f"Fehler beim Finden des Punkte-Feldes: {e}")
+
+	    filename = datetime.now().strftime("%Y-%m-%d_%H-%M-%S_loginbutton.png")
+	    driver.save_screenshot(filename)
+
 	    driver.quit()
 	    # Wait to avoid overloading the server
 	    time.sleep(600)
