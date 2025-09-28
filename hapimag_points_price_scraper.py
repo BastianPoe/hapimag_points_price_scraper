@@ -282,9 +282,6 @@ while True:
 	# Output row data
 	print(row_data)
 
-	# Calculate sleep interval
-	sleep_duration = next_execution_time - time.time()
-
 	if float(preis)*100 <= config.get('price_threshold'):
 		title = 'Hapimag Punkte sind günstig'
 		message = preis
@@ -297,8 +294,10 @@ while True:
 	
 	# Calculate when to execute next time
 	while next_execution_time < time.time():
-		print(f"{next_execution_time} + {config.get('reload_interval')}")
 		next_execution_time = next_execution_time + config.get('reload_interval')
+	
+	# Calculate sleep interval
+	sleep_duration = next_execution_time - time.time()
 
 	# Sleep
 	if sleep_duration > 0:
