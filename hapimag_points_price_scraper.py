@@ -269,7 +269,12 @@ while True:
 	client = gspread.authorize(creds)
 	
 	# Open the spreadsheet
-	spreadsheet = client.open(config.get('spreadsheet_name'))
+	try:
+	    spreadsheet = client.open(config.get('spreadsheet_name'))
+	except Exception as e:
+	    print(f"Unable to open spreadsheet: {e}")
+
+	    continue
 
 	# Open the sheet (within the spreadsheet)
 	worksheet = spreadsheet.worksheet(config.get('worksheet_name'))
