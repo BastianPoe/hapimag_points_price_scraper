@@ -4,7 +4,7 @@ FROM python:3.9.23-bookworm
 # Set environment variables for headless Chrome
 ENV DEBIAN_FRONTEND=noninteractive
 # Specify a compatible Chrome version
-ENV CHROME_VERSION=140.0.7339.207
+ENV CHROME_VERSION=141.0.7390.54
 
 # Install Google Chrome and ChromeDriver
 # This section has been updated to use a more robust method for adding the GPG key
