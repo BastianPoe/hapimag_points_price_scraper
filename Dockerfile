@@ -3,8 +3,6 @@ FROM python:3.9.23-bookworm
 
 # Set environment variables for headless Chrome
 ENV DEBIAN_FRONTEND=noninteractive
-# Specify a compatible Chrome version
-ENV CHROME_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE")
 
 # Install Google Chrome and ChromeDriver
 # This section has been updated to use a more robust method for adding the GPG key
@@ -36,10 +34,12 @@ RUN apt-get update && apt-get install -y \
 
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \ 
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
-RUN apt-get update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends
+RUN export CHROME_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE") && \
+    apt-get update && apt-get install -y google-chrome-stable=${CHROME_VERSION}-1 --no-install-recommends
 
 # Download and install ChromeDriver
-RUN wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
+RUN export CHROME_VERSION=$(curl -s "https://googlechromelabs.github.io/chrome-for-testing/LATEST_RELEASE_STABLE") && \
+    wget -N https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/${CHROME_VERSION}/linux64/chromedriver-linux64.zip -P /tmp/ && \
     unzip /tmp/chromedriver-linux64.zip -d /usr/local/bin/ && \
     mv /usr/local/bin/chromedriver-linux64/chromedriver /usr/local/bin/chromedriver && \
     rm -rf /tmp/chromedriver-linux64.zip /usr/local/bin/chromedriver-linux64 && \
