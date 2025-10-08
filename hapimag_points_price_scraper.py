@@ -272,17 +272,23 @@ while True:
 	try:
 	    spreadsheet = client.open(config.get('spreadsheet_name'))
 	except Exception as e:
-	    print(f"Unable to open spreadsheet: {e}")
+	    print(f"Unable to connect to Google sheets: {e}")
 
 	    continue
 
-	# Open the sheet (within the spreadsheet)
-	worksheet = spreadsheet.worksheet(config.get('worksheet_name'))
-
-	# Append a row to the sheet
+	# Prepare spreadsheet row
 	timestamp = f"{time.strftime('%Y-%m-%d %H:%M:%S')}"
 	row_data = [timestamp, float(preis), preis]
-	worksheet.append_row(row_data)
+	
+	# Open the sheet (within the spreadsheet)
+	try:
+		worksheet = spreadsheet.worksheet(config.get('worksheet_name'))
+		worksheet.append_row(row_data)
+	
+	except Exception as e:
+	    print(f"Unable to open spreadsheet: {e}")
+
+	    continue
 
 	# Output row data
 	print(row_data)
